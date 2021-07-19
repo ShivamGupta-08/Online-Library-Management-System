@@ -1,3 +1,4 @@
+import time
 class Library:
     def __init__(self,listofbooks,name):
         self.lenddata ={}
@@ -11,7 +12,7 @@ class Library:
         print("Which Book You Want Enter Index")
         book = int(input())
         self.lenddata.update({self.listofbook[book] : name})
-        return f"{name} take {self.listofbook.pop(book)}"
+        return f"{name} take [{self.listofbook.pop(book)}]"
 
     def Addbook(self):
         print("Enter your book name ")
@@ -20,10 +21,18 @@ class Library:
         return f"You added {book} "
 
     def Return(self):
-        print("Enter the book name")
-        book = input()
-        self.lenddata.pop(book)
-        return  f"You return : {book}"
+        try:
+            name = nametake()
+            print("Enter the book name")
+            book = input()
+            self.lenddata.pop(book)
+            self.listofbook.append(book)
+            with open("return_data.txt","a") as f:
+                f.write(str([str(time.asctime())])+":"+name+" returned ["+book+"]\n")
+            return f"{name} return : {book}"
+        except Exception:
+            print("Oops!  Enter the book name correctly  Try again...")
+
 
 
 ShivamLibrary = Library(["Sacred Dramas","Hymns in Prose for Children","Divine Songs","A Description of "
@@ -40,7 +49,6 @@ def mainfunc():
         if inp == "D":
             ShivamLibrary.Displaybook()
         elif inp == "L":
-
             print(ShivamLibrary.lenddata)
             print(ShivamLibrary.Lendbook())
         elif inp == "A":
@@ -53,5 +61,5 @@ def nametake():
     name = input()
     print(f"Hi, {name}")
     return name
-
-print(mainfunc())
+if __name__ == '__main__':
+    print(mainfunc())
